@@ -152,6 +152,8 @@ th#delete {
     margin: 0;
     padding: 0;
     text-align: center;
+    height: 5vh;
+    min-height: 5vh;
 }
 
 th#delete:hover {
@@ -160,6 +162,7 @@ th#delete:hover {
 
 th {
     height: 5vh;
+    min-height: 5vh;
     font-size: 25px;
 }
 
