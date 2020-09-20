@@ -43,6 +43,7 @@ hr {
 }
 
 #skriv label {
+    z-index: 100;
     background-color: rgba(0, 0, 255, 0.5);
     border-radius: 100%;
     border: none;
@@ -74,6 +75,7 @@ hr {
 
 #ul {
     /* display: none; */
+    z-index: 100;
     list-style-type: none;
     margin: 0;
     padding: 0;
