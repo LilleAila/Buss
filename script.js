@@ -28,7 +28,7 @@ function dateDiff(date1, date2) {
 function binaryto(input) {
     let inputt = input.split('');
     //console.log( inputt );
-    let output = []
+    let output = [];
     for (var i = 0; i < input.length; i++) {
         output.push(inputt[i].charCodeAt(0).toString(2));
     }
@@ -81,14 +81,15 @@ $('#skrive').click(function() {
         skriv({
             navn: prompt('Navn'),
             etikett: prompt('Etikett'),
-            dato: `new Date(${prompt('År')}, ${prompt('Måned') - 1}, ${prompt('Dag')})`
+            dato: `new Date(${prompt('År')}, ${prompt('Måned') - 1}, ${prompt('Dag')})`,
+            melding: prompt('Melding når tiden er ute').toLowerCase()
         });
     } else {
         alert('Feil passord');
         $('#checkbox').prop('checked', false);
     }
     //$('body').append('<h1>Trykket</h1>');
-})
+});
 
 // $('#les').click(function() {
 //     les({
@@ -100,7 +101,8 @@ function skriv(input) {
     firebase.database().ref(`/biletter/${Math.floor(Math.random() * Math.floor(Math.random() * Date.now()))}`).update({
         navn: input.navn,
         dato: input.dato,
-        etikett: input.etikett
+        etikett: input.etikett,
+        melding: input.melding
     });
     console.log('Trykket');
     alert('Trykket');
@@ -110,7 +112,7 @@ function skriv(input) {
 
 function les(input) {
     firebase.database().ref(`/biletter/${input.navn.toLowerCase()}`).once('value').then(function(snapshot) {
-        let dato = eval(snapshot.val().dato)
+        let dato = eval(snapshot.val().dato);
         console.log(dato);
         $('#myTable ').append(`
         <tr id="${ider}" navn="${input.navn.toLowerCase()}">
@@ -123,7 +125,7 @@ function les(input) {
         `);
         ider++;
         //$('body').append(`<br/>${cfl(input.navn.toLowerCase())} sin bilett går ut ${dager[dato.getDay()]} den ${dato.getDate()}. ${maneder[dato.getMonth()]} ${dato.getFullYear()}, om ${dateDiff(new Date(), dato)}`);
-    })
+    });
 }
 
 $('document').ready(function() {
