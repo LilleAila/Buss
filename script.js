@@ -82,7 +82,7 @@ $('#skrive').click(function() {
             navn: prompt('Navn'),
             etikett: prompt('Etikett'),
             dato: `new Date(${prompt('År')}, ${prompt('Måned') - 1}, ${prompt('Dag')})`,
-            melding: prompt('Melding når tiden er ute').toLowerCase()
+            melding: prompt('Melding når tiden er ute')
         });
     } else {
         alert('Feil passord');
@@ -98,7 +98,7 @@ $('#skrive').click(function() {
 // })
 
 function skriv(input) {
-    firebase.database().ref(`/biletter/${Math.floor(Math.random() * Math.floor(Math.random() * Date.now()))}`).update({
+    firebase.database().ref(`/telle/${Math.floor(Math.random() * Math.floor(Math.random() * Date.now()))}`).update({
         navn: input.navn,
         dato: input.dato,
         etikett: input.etikett,
@@ -111,7 +111,7 @@ function skriv(input) {
 }
 
 function les(input) {
-    firebase.database().ref(`/biletter/${input.navn.toLowerCase()}`).once('value').then(function(snapshot) {
+    firebase.database().ref(`/telle/${input.navn.toLowerCase()}`).once('value').then(function(snapshot) {
         let dato = eval(snapshot.val().dato);
         console.log(dato);
         $('#myTable ').append(`
@@ -129,7 +129,7 @@ function les(input) {
 }
 
 $('document').ready(function() {
-    firebase.database().ref(`/biletter/`).once('value').then(function(snapshot) {
+    firebase.database().ref(`/telle/`).once('value').then(function(snapshot) {
         let keys = Object.keys(snapshot.val());
         console.log(keys);
         for (var i = 0; i < keys.length; i++) {
@@ -147,7 +147,7 @@ $('#delete').click(function() {
         if (delet == true || delet) {
             $.each($('.check:checked'), function(index) {
                 console.log($(this).attr('del'));
-                firebase.database().ref(`/biletter/${$(this).attr('del')}/`).set(null);
+                firebase.database().ref(`/telle/${$(this).attr('del')}/`).set(null);
             });
             alert('Slettet');
             location.reload();
