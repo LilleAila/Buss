@@ -167,7 +167,7 @@ $('document').ready(function() {
     zoomOut();
     zoomOut();
     if (window.innerWidth <= 900 || isMobile.any()) {
-        $('#delete').html('<img src="trash.png">')
+        $('#delete').html('<img src="https://static.thenounproject.com/png/3823-200.png">')
     }
 });
 
