@@ -7,20 +7,20 @@ function dateDiff(date1, date2) {
     // round to the nearest whole number
     let diff = Math.round((date2 - date1) / (1000 * 60 * 60 * 24));
     if (diff == 1) {
-        return `Om ${diff} dag. Du må kjøpe ny bilett.`;
+        return `Om ${diff} dag.`;
     } else if (diff == 0) {
-        return `I dag. Kjøp ny.`;
+        return `I dag.`;
     } else if (diff <= 7 && diff >= 1) {
-        return `Om ${diff} dager. Du må snart kjøpe ny bilett.`;
+        return `Om ${diff} dager.`;
     } else if (diff >= 8) {
-        return `Om ${diff} dager. Du trenger ikke ny bilett.`;
+        return `Om ${diff} dager.`;
     } else {
         let diffrnc = '' + diff;
         let diffrnce = diffrnc.slice(1);
         if (diffrnce == 1) {
-            return `${diffrnce} dag siden. Kjøp ny.`;
+            return `${diffrnce} dag siden.`;
         } else {
-            return `${diffrnce} dager siden. Kjøp ny`;
+            return `${diffrnce} dager siden.`;
         }
     }
 }
@@ -39,9 +39,11 @@ function binaryfrom(input) {
     let output = input.split(' ').map(bin => String.fromCharCode(parseInt(bin, 2))).join('');
     return output;
 }
-// function cfl(string) {
-//     return string.charAt(0).toUpperCase() + string.slice(1);
-// }
+
+function cofl(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 function myFunction() {
     var input, filter, table, tr, td, txtValue;
     input = document.getElementById("myInput");
@@ -74,22 +76,31 @@ function cfl(str) {
 }
 
 $('#skrive').click(function() {
-    skriv({
-        navn: prompt('Navn'),
-        dato: `new Date(${prompt('År')}, ${prompt('Måned') - 1}, ${prompt('Dag')})`
-    });
+    let passordlogginn = prompt('Hva er passordet?');
+    if (passordlogginn == binaryfrom(binaryfrom(binaryfrom(pass)))) {
+        skriv({
+            navn: prompt('Navn'),
+            etikett: prompt('Etikett'),
+            dato: `new Date(${prompt('År')}, ${prompt('Måned') - 1}, ${prompt('Dag')})`
+        });
+    } else {
+        alert('Feil passord');
+        $('#checkbox').prop('checked', false);
+    }
     //$('body').append('<h1>Trykket</h1>');
 })
 
-$('#les').click(function() {
-    les({
-        navn: prompt('Navn')
-    })
-})
+// $('#les').click(function() {
+//     les({
+//         navn: prompt('Navn')
+//     })
+// })
 
 function skriv(input) {
-    firebase.database().ref(`/biletter/${input.navn.toLowerCase()}`).update({
-        dato: input.dato
+    firebase.database().ref(`/biletter/${Math.floor(Math.random() * Math.floor(Math.random() * Date.now()))}`).update({
+        navn: input.navn,
+        dato: input.dato,
+        etikett: input.etikett
     });
     console.log('Trykket');
     alert('Trykket');
@@ -103,7 +114,8 @@ function les(input) {
         console.log(dato);
         $('#myTable ').append(`
         <tr id="${ider}" navn="${input.navn.toLowerCase()}">
-            <td>${cfl(input.navn.toLowerCase())}</td>
+            <td>${cfl(snapshot.val().navn.toLowerCase())}</td>
+            <td>${cofl(snapshot.val().etikett)}</td>
             <td>${cfl(dager[dato.getUTCDay()])} den ${dato.getDate()}. ${maneder[dato.getMonth()]} ${dato.getFullYear()}</td>
             <td>${dateDiff(new Date(), dato)}</td>
             <td class="delete"><input type="checkbox" del="${input.navn.toLowerCase()}" class="check"></td>
@@ -115,32 +127,32 @@ function les(input) {
 }
 
 $('document').ready(function() {
-    let passordlogginn = prompt('Hva er passordet?');
-    if (passordlogginn == binaryfrom(binaryfrom(binaryfrom(pass)))) {
-        firebase.database().ref(`/biletter/`).once('value').then(function(snapshot) {
-            let keys = Object.keys(snapshot.val());
-            console.log(keys);
-            for (var i = 0; i < keys.length; i++) {
-                les({
-                    navn: keys[i]
-                });
-            }
-        });
-    } else {
-        location.reload();
-    }
+    firebase.database().ref(`/biletter/`).once('value').then(function(snapshot) {
+        let keys = Object.keys(snapshot.val());
+        console.log(keys);
+        for (var i = 0; i < keys.length; i++) {
+            les({
+                navn: keys[i]
+            });
+        }
+    });
 });
 
 $('#delete').click(function() {
-    let delet = confirm('Er du sikker på at du vil slette?');
-    if (delet == true || delet) {
-        $.each($('.check:checked'), function(index) {
-            console.log($(this).attr('del'));
-            firebase.database().ref(`/biletter/${$(this).attr('del')}/`).set(null);
-        });
-        alert('Slettet');
-        location.reload();
+    let passordlogginn = prompt('Hva er passordet?');
+    if (passordlogginn == binaryfrom(binaryfrom(binaryfrom(pass)))) {
+        let delet = confirm('Er du sikker på at du vil slette?');
+        if (delet == true || delet) {
+            $.each($('.check:checked'), function(index) {
+                console.log($(this).attr('del'));
+                firebase.database().ref(`/biletter/${$(this).attr('del')}/`).set(null);
+            });
+            alert('Slettet');
+            location.reload();
+        } else {
+            alert('Sletter Ikke');
+        }
     } else {
-        alert('Sletter Ikke');
+        alert('Feil passord');
     }
 });
