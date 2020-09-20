@@ -138,6 +138,13 @@ $('document').ready(function() {
             });
         }
     });
+    zoomOut();
+    zoomOut();
+    zoomOut();
+    zoomOut();
+    zoomOut();
+    zoomOut();
+    zoomOut();
 });
 
 $('#delete').click(function() {
@@ -158,3 +165,17 @@ $('#delete').click(function() {
         alert('Feil passord');
     }
 });
+
+function zoomIn() {
+    var Page = document.getElementById('Body');
+    var zoom = parseInt(Page.style.zoom) + 10 + '%'
+    Page.style.zoom = zoom;
+    return false;
+}
+
+function zoomOut() {
+    var Page = document.getElementById('Body');
+    var zoom = parseInt(Page.style.zoom) - 10 + '%'
+    Page.style.zoom = zoom;
+    return false;
+}
